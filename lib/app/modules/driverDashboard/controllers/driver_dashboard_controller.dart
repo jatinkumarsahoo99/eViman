@@ -142,6 +142,7 @@ class DriverDashboardController extends GetxController
                 setCustomMarkerIcon();
                 update(['top']);
               }
+
             }
             if(checkStatusModel != null &&  checkStatusModel?.riderStatus?.isOnline != null){
               if(checkStatusModel?.riderStatus?.isOnline??false ){
