@@ -599,7 +599,7 @@ class DriverDashboardController extends GetxController
             incomingBookingModel?.incomingBooking?.bookingId ?? "EVIMAN_1",
         "riderAssigned": riderIdNew ?? "41",
         "vehicleAssigned": vehicleIdNew ?? "33",
-        "vehicleTypeId": "1",
+        "vehicleTypeId": incomingBookingModel?.incomingBooking?.fareInfo??"",
         "clientId": incomingBookingModel?.incomingBooking?.clientId ?? "28",
         "pickupLat":
             incomingBookingModel?.incomingBooking?.clientLat ?? "8.2522",
@@ -719,10 +719,10 @@ class DriverDashboardController extends GetxController
   }
   void completeRide1(
       {double? distance, String? amount, String? durationInMinutes}) async {
-    // double distanceInKilometer = (distance!) / 1000;
+    double distanceInKilometer = (distance!) / 1000;
 
     bool isOk = await showCommonPopupNew5(
-        "Travel Distance-${(double.parse((travelDist??"0").replaceAll("km", "").trim()) ?? 0).toStringAsFixed(2)} K.M.\nTime Taken $durationInMinutes minutes",
+        "Travel Distance-${(distanceInKilometer ?? 0).toStringAsFixed(2)} K.M.\nTime Taken $durationInMinutes minutes",
         "You need to collect ₹$amount from customer",
         barrierDismissible: true,
         isYesOrNoPopup: true,
@@ -805,7 +805,7 @@ class DriverDashboardController extends GetxController
                 desLat: latLngList[i + 1]['latitude'],
                 desLong: latLngList[i + 1]['longitude'])
             .then((value) {
-          if (value != 0.00 && value != 0) {
+          if (value != 0) {
             print(">>>>>>>>>>>>>>>valueJKs"+value.toString());
             totalDistance = totalDistance + value;
             print(">>>>>>>>>>>>>>>valueJKs"+totalDistance.toString());
@@ -822,7 +822,8 @@ class DriverDashboardController extends GetxController
     DateTime endDate = DateTime.now();
     Duration duration = endDate.difference(startDate1);
     double distanceInKilometer = totalDistance / 1000;
-    getActualAmount(travelDist.toString().replaceAll("km", ""), duration.inMinutes.toString()).then((value) {
+    print(">>>>>>>>>>>>>>>>>travel distance$distanceInKilometer");
+    getActualAmount(distanceInKilometer.toString(), duration.inMinutes.toString()).then((value) {
       if (value.toString().trim() != "") {
         completeRide1(
             amount: value ?? "40",

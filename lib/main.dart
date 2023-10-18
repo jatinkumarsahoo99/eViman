@@ -32,6 +32,11 @@ import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 import 'package:dio/dio.dart' as service1;
 import 'package:geolocator/geolocator.dart' as geoLoc;
 
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator_apple/geolocator_apple.dart';
+import 'package:geolocator_android/geolocator_android.dart';
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -88,11 +93,18 @@ Future<void> onStart(ServiceInstance service) async {
 
   if (riderId != null && authToken != null && riderId != "" && authToken != "") {
 
-    geoLoc.GeolocatorPlatform geolocator = geoLoc.GeolocatorPlatform.instance;
+    GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
 
-    geoLoc.LocationSettings locationSettings = geoLoc.AndroidSettings(
+    LocationSettings locationSettings = AndroidSettings(
         accuracy: geoLoc.LocationAccuracy.high,
-        distanceFilter: 0,
+        distanceFilter: 100,
+        intervalDuration: const Duration(seconds: 10),
+        foregroundNotificationConfig: const ForegroundNotificationConfig(
+          notificationText:
+          "Example app will continue to receive your location even when you aren't using it",
+          notificationTitle: "Running in Background",
+          enableWakeLock: true,
+        ),
         forceLocationManager: true);
 
 
